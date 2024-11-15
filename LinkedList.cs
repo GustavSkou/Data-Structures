@@ -1,57 +1,56 @@
-using System.Runtime.CompilerServices;
-
-class LinkedListNode <T>
+class LinkedListNode<T>
 {
-    private LinkedListNode <T>? nextNode, prevNode;
-    private T? value;
+    private LinkedListNode<T>? nextNode, prevNode;
+    private T value;
 
-    public LinkedListNode <T>? NextNode
+    public LinkedListNode<T>? NextNode
     {
-        get {return nextNode;}
-        set {nextNode = value;}
+        get { return nextNode; }
+        set { nextNode = value; }
     }
 
-    public LinkedListNode <T>? PrevNode
+    public LinkedListNode<T>? PrevNode
     {
-        get {return prevNode;}
-        set {prevNode = value;}
+        get { return prevNode; }
+        set { prevNode = value; }
     }
 
     public T? Value
     {
         get { return value; }
-        set { this.value = value; }
+        set { this.value = value!; }
     }
 
-    public LinkedListNode ()
+    public LinkedListNode()
     {
         nextNode = null;
         prevNode = null;
+        value = default!;
     }
 }
 
-class LinkedList <T> : LinkedListNode <T>
+class LinkedList<T> : LinkedListNode<T>
 {
-    private LinkedListNode <T>? head, tail;
+    private LinkedListNode<T>? head, tail;
 
     private int count;
 
-    public LinkedListNode <T>? Head
+    public LinkedListNode<T>? Head
     {
-        get {return head;}
+        get { return head; }
     }
 
-    public LinkedListNode <T>? Tail
+    public LinkedListNode<T>? Tail
     {
-        get {return tail;}
-    }
-    
-    public int Count 
-    {
-        get {return count;}
+        get { return tail; }
     }
 
-    public LinkedList ()
+    public int Count
+    {
+        get { return count; }
+    }
+
+    public LinkedList()
     {
         head = null;
         tail = null;
@@ -60,13 +59,18 @@ class LinkedList <T> : LinkedListNode <T>
 
     public void AddFirst(T value)
     {
-        LinkedListNode<T> node = new();
-        node.Value = value;
-        if (head == null) {
+        LinkedListNode<T> node = new()
+        {
+            Value = value
+        };
+
+        if (head == null)
+        {
             head = node;
             tail = node;
         }
-        else {
+        else
+        {
             node.NextNode = head;
             head.PrevNode = node;
             head = node;
@@ -78,11 +82,13 @@ class LinkedList <T> : LinkedListNode <T>
     {
         LinkedListNode<T> node = new();
         node.Value = value;
-        if (tail == null) {
+        if (tail == null)
+        {
             head = node;
             tail = node;
         }
-        else {
+        else
+        {
             tail.NextNode = node;
             node.PrevNode = tail;
             tail = node;
@@ -90,44 +96,52 @@ class LinkedList <T> : LinkedListNode <T>
         count++;
     }
 
-    public void Remove (T value)
+    public void Remove(T value)
     {
-        LinkedListNode <T>? node = head;
+        LinkedListNode<T>? node = head;
 
-        while (node != null) {
-            if (node.Value.Equals(value)) {
+        while (node != null)
+        {
+            if (node.Value != null && node.Value.Equals(value))
+            {
                 count--;
-                if (node == head) {
+                if (node == head)
+                {
                     head = node.NextNode;
-                    head.PrevNode = null;
+                    if (head != null) head.PrevNode = null;
                     return;
                 }
-                if (node == tail) {
+                if (node == tail)
+                {
                     tail = node.PrevNode;
-                    tail.NextNode = null;
+                    if (tail != null) tail.NextNode = null;
                     return;
                 }
-                node.PrevNode.NextNode = node.NextNode;
-                node.NextNode.PrevNode = node.PrevNode;
+                node.PrevNode!.NextNode = node.NextNode;
+                node.NextNode!.PrevNode = node.PrevNode;
                 return;
             }
             node = node.NextNode;
-        } 
-        throw new InvalidOperationException($"Value {value} could not be found");    
+        }
+        throw new InvalidOperationException($"Value {value} could not be found");
     }
 
-    public void Remove (LinkedListNode <T> nodeObj)
+    public void Remove(LinkedListNode<T> nodeObj)
     {
-        LinkedListNode <T>? node = head;
+        LinkedListNode<T>? node = head;
 
-        while (node != null) {
-            if (node.Equals(nodeObj)) {
+        while (node != null)
+        {
+            if (node.Equals(nodeObj))
+            {
                 count--;
-                if (node == head) {
+                if (node == head)
+                {
                     head = node.NextNode;
                     return;
                 }
-                if (node == tail) {
+                if (node == tail)
+                {
                     tail = node.PrevNode;
                     return;
                 }
@@ -135,49 +149,55 @@ class LinkedList <T> : LinkedListNode <T>
                 return;
             }
             node = node.NextNode;
-        } 
-        throw new InvalidOperationException($"Value {nodeObj} could not be found");        
+        }
+        throw new InvalidOperationException($"Value {nodeObj} could not be found");
     }
 
-    public void RemoveFirst ()
+    public void RemoveFirst()
     {
-        if (head != null) {
+        if (head != null)
+        {
+            count--;
             head = head.NextNode;
-            head.PrevNode = null;
+            if (head != null) head.PrevNode = null;
         }
-        else throw new NullReferenceException(); 
+        else throw new NullReferenceException();
     }
 
-    public void RemoveLast ()
+    public void RemoveLast()
     {
-        if (tail != null) {
+        if (tail != null)
+        {
+            count--;
             tail = tail.PrevNode;
-            tail.NextNode = null;
+            if (tail != null) tail.NextNode = null;
         }
-        else throw new NullReferenceException(); 
+        else throw new NullReferenceException();
     }
 
-    public LinkedListNode <T> Find (T value)
+    public LinkedListNode<T> Find(T value)
     {
-        LinkedListNode <T>? node = head;
+        LinkedListNode<T>? node = head;
 
-        while (node != null) {
-            if (node.Value.Equals(value)) return node;
+        while (node != null)
+        {
+            if (node.Value != null && node.Value.Equals(value)) return node;
             node = node.NextNode;
-        } 
+        }
         throw new InvalidOperationException($"Value {value} could not be found");
     }
 
-    public LinkedListNode <T>[] ToArray()
+    public LinkedListNode<T>[] ToArray()
     {
-        LinkedListNode <T>[] array = new LinkedListNode <T>[count];
-
-        LinkedListNode <T>? node = head;
-        
-        for (int index = 0; index < count; index++) {
+        LinkedListNode<T>[] array = new LinkedListNode<T>[count];
+        LinkedListNode<T>? node = head;
+        int index = 0;
+        while (node != null)
+        {
             array[index] = node;
             node = node.NextNode;
+            index++;
         }
-        return array; 
+        return array;
     }
 }
