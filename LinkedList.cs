@@ -57,6 +57,14 @@ class LinkedList<T> : LinkedListNode<T>
         count = 0;
     }
 
+    public LinkedList(LinkedList<T> linkedList)
+    {
+        head = null;
+        tail = null;
+        count = 0;
+        AddList(linkedList);
+    }
+
     public void AddFirst(T value)
     {
         LinkedListNode<T> node = new()
@@ -94,6 +102,16 @@ class LinkedList<T> : LinkedListNode<T>
             tail = node;
         }
         count++;
+    }
+
+    public void AddList(LinkedList<T> linkedList)
+    {
+        LinkedListNode<T> node = linkedList.Head!;
+        while (node != null)
+        {
+            AddLast(node.Value!);
+            node = node.NextNode!;
+        }
     }
 
     public void Remove(T value)
